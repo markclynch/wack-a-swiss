@@ -1,13 +1,15 @@
-import React, { Component } from 'react'
-import { StyleSheet, View, Image } from 'react-native'
-export default class Hole extends Component {
-  render() {
-    return (
-      <View>
+import React from 'react'
+import { StyleSheet, View, Image, TouchableWithoutFeedback } from 'react-native'
+
+const Swiss = props => {
+  const { index, handlePress } = props
+  return (
+    <View>
+      <TouchableWithoutFeedback onPress={() => handlePress(index)}>
         <Image source={require('../images/Swiss.png')} style={styles.holes} />
-      </View>
-    )
-  }
+      </TouchableWithoutFeedback>
+    </View>
+  )
 }
 const styles = StyleSheet.create({
   holes: {
@@ -17,3 +19,4 @@ const styles = StyleSheet.create({
     margin: 10
   }
 })
+export default Swiss

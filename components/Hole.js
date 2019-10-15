@@ -1,10 +1,17 @@
-import React, { Component } from 'react'
-import { StyleSheet, View } from 'react-native'
-export default class Hole extends Component {
-  render() {
-    return <View style={styles.holes}></View>
-  }
+import React from 'react'
+import { StyleSheet, View, TouchableWithoutFeedback } from 'react-native'
+const Hole = props => {
+  const { index, handlePressEmpty } = props
+
+  return (
+    <View>
+      <TouchableWithoutFeedback onPress={() => handlePressEmpty(index)}>
+        <View style={styles.holes}></View>
+      </TouchableWithoutFeedback>
+    </View>
+  )
 }
+
 const styles = StyleSheet.create({
   holes: {
     backgroundColor: '#222',
@@ -14,3 +21,5 @@ const styles = StyleSheet.create({
     margin: 10
   }
 })
+
+export default Hole
