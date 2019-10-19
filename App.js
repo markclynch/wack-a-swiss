@@ -45,20 +45,19 @@ export default function App() {
   const updateHoles = newHoles => {
     setHoles(newHoles)
   }
-  const refreshBoard = () => {
-    const newHoles = holes.slice()
-    setHoles(emptyArray)
+  const refreshBoard = emptyArray => {
     setTimeout(function() {
       const index = Math.floor(Math.random() * Math.floor(8))
       console.log(index)
-      newHoles[index] = !newHoles[index]
-      updateHoles(newHoles)
-    }, 500)
+      emptyArray[index] = !emptyArray[index]
+      updateHoles(emptyArray)
+    }, 100)
   }
 
   useInterval(() => {
     if (count.toFixed(2) > 1 && count.toFixed(2) % difficultyLevel == 0) {
-      refreshBoard()
+      setHoles(emptyArray)
+      refreshBoard(emptyArray)
     }
 
     setCount(count + 0.1)
@@ -86,12 +85,11 @@ export default function App() {
         )}`}</Text>
       </View>
       <View style={styles.container}>
-        {holes.map(hole => {
-          x += 1
+        {holes.map((hole, i) => {
           return hole ? (
             <Hole
-              key={x}
-              index={x}
+              key={i}
+              index={i}
               handlePressEmpty={e => handlePressEmpty(e)}
             />
           ) : (
