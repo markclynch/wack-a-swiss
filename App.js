@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
+import { Button } from 'react-native-elements'
 import Hole from './components/Hole'
 import Swiss from './components/Swiss'
 //import { getCurrentFrame } from 'expo/build/AR'
@@ -25,7 +26,7 @@ function useInterval(callback, delay) {
 
 export default function App() {
   const [holes, setHoles] = useState([
-    false,
+    true,
     true,
     true,
     true,
@@ -36,7 +37,8 @@ export default function App() {
     true
   ])
   const [score, setScore] = useState(0)
-  let [count, setCount] = useState(0)
+  const [count, setCount] = useState(0)
+  const [isRunning, setIsRunning] = useState(false)
 
   let x = -1
 
@@ -53,16 +55,16 @@ export default function App() {
       updateHoles(emptyArray)
     }, 100)
   }
+  if (isRunning) {
+    useInterval(() => {
+      if (count.toFixed(2) % difficultyLevel == 0) {
+        setHoles(emptyArray)
+        refreshBoard(emptyArray)
+      }
 
-  useInterval(() => {
-    if (count.toFixed(2) > 1 && count.toFixed(2) % difficultyLevel == 0) {
-      setHoles(emptyArray)
-      refreshBoard(emptyArray)
-    }
-
-    setCount(count + 0.1)
-  }, 100)
-
+      setCount(count + 0.1)
+    }, 100)
+  }
   const handlePressEmpty = e => {
     console.log(e)
     setScore(score - 20)
@@ -71,6 +73,10 @@ export default function App() {
   const handlePress = index => {
     console.log(index)
     setScore(score + 10)
+  }
+
+  const handleStart = () => {
+    setIsRunning(true)
   }
 
   return (
@@ -84,6 +90,8 @@ export default function App() {
           2
         )}`}</Text>
       </View>
+      <Button title='Start Wacking' onPress={handleStart()} />
+
       <View style={styles.container}>
         {holes.map((hole, i) => {
           return hole ? (
