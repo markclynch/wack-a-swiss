@@ -3,28 +3,28 @@ import { StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import Hole from './components/Hole'
 import Swiss from './components/Swiss'
-//import { getCurrentFrame } from 'expo/build/AR'
-function useInterval(callback, delay) {
-  const savedCallback = useRef()
-
-  // Remember the latest callback.
-  useEffect(() => {
-    savedCallback.current = callback
-  }, [callback])
-
-  // Set up the interval.
-  useEffect(() => {
-    function tick() {
-      savedCallback.current()
-    }
-    if (delay !== null) {
-      let id = setInterval(tick, delay)
-      return () => clearInterval(id)
-    }
-  }, [delay])
-}
 
 export default function App() {
+  //import { getCurrentFrame } from 'expo/build/AR'
+  function useInterval(callback, delay) {
+    const savedCallback = useRef()
+
+    // Remember the latest callback.
+    useEffect(() => {
+      savedCallback.current = callback
+    }, [callback])
+
+    // Set up the interval.
+    useEffect(() => {
+      function tick() {
+        savedCallback.current()
+      }
+      if (delay !== null) {
+        let id = setInterval(tick, delay)
+        return () => clearInterval(id)
+      }
+    }, [delay])
+  }
   const [holes, setHoles] = useState([
     true,
     true,
@@ -41,7 +41,7 @@ export default function App() {
   const [isRunning, setIsRunning] = useState(false)
 
   let x = -1
-
+  console.log(isRunning)
   let difficultyLevel = 10
   let emptyArray = [true, true, true, true, true, true, true, true, true]
   const updateHoles = newHoles => {
@@ -55,16 +55,19 @@ export default function App() {
       updateHoles(emptyArray)
     }, 100)
   }
-  if (isRunning) {
-    useInterval(() => {
+
+  useInterval(isRunning => {
+    if (isRunning) {
+      console.log('use Interval Started')
       if (count.toFixed(2) % difficultyLevel == 0) {
         setHoles(emptyArray)
         refreshBoard(emptyArray)
       }
 
       setCount(count + 0.1)
-    }, 100)
-  }
+    }
+  }, 100)
+
   const handlePressEmpty = e => {
     console.log(e)
     setScore(score - 20)
@@ -76,7 +79,8 @@ export default function App() {
   }
 
   const handleStart = () => {
-    setIsRunning(true)
+    console.log(isRunning)
+    setIsRunning(!isRunning)
   }
 
   return (
@@ -90,7 +94,7 @@ export default function App() {
           2
         )}`}</Text>
       </View>
-      <Button title='Start Wacking' onPress={handleStart()} />
+      <Button title='Start Wacking' onPress={e => handleStart(e)} />
 
       <View style={styles.container}>
         {holes.map((hole, i) => {
