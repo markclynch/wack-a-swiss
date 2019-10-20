@@ -5,7 +5,7 @@ import Hole from './components/Hole'
 import Swiss from './components/Swiss'
 
 const emptyArray = [true, true, true, true, true, true, true, true, true]
-const arrayIndexIndicator = -1
+// const arrayIndexIndicator = -1
 //import { getCurrentFrame } from 'expo/build/AR'
 function useInterval(callback, delay) {
   const savedCallback = useRef()
@@ -41,21 +41,25 @@ export default function App() {
   const [score, setScore] = useState(0)
   const [count, setCount] = useState(0)
   const [isRunning, setIsRunning] = useState(false)
-  const [difficultyLevel, setDifficultyLevel] = useState(1.5)
-  const [wackable, setWackable] = useState(false)
+  const [difficultyLevel, setDifficultyLevel] = useState(2.0)
+  const [wackable, setWackable] = useState(true)
 
+  //Start with a fresh board of empty holes, 1/4 second before new Swiss loaded
   const refreshBoard = () => {
     setTimeout(function() {
       const index = Math.floor(Math.random() * Math.floor(8))
 
       setHoles(emptyArray.map((curBool, i) => (i === index ? false : curBool)))
-    }, 50)
+    }, 250)
   }
+
   let wackOpportunities = 0
   useInterval(() => {
     if (isRunning) {
-      if (count.toFixed(2) >= 1 && count.toFixed(2) % difficultyLevel == 0) {
-        setWackable(!wackable)
+      if (
+        count.toFixed(2) == 0.1 ||
+        (count.toFixed(2) >= 1 && count.toFixed(2) % difficultyLevel == 0)
+      ) {
         setHoles(emptyArray)
         refreshBoard(emptyArray)
         wackOpportunities += 1
@@ -77,11 +81,22 @@ export default function App() {
   const handlePress = index => {
     console.log(index)
     setScore(score + 10)
+    console.log('index')
+    setWackable(false)
+    setTimeout(function() {
+      setWackable(true)
+      refreshBoard(holes)
+    }, 260)
   }
 
   const handleStart = () => {
     console.log(isRunning)
     setIsRunning(!isRunning)
+  }
+  const handleReset = () => {
+    setIsRunning(false)
+    setCount(0)
+    setScore(0)
   }
 
   return (
@@ -95,7 +110,23 @@ export default function App() {
           2
         )}`}</Text>
       </View>
-      <Button title='Start Wacking' onPress={e => handleStart(e)} />
+      <Button
+        title={!isRunning ? 'Start Wacking' : 'Pause'}
+        containerStyle={{ marginLeft: 100, marginRight: 100 }}
+        onPress={e => handleStart(e)}
+      />
+      <Button
+        title='Reset Game'
+        containerStyle={{
+          marginLeft: 100,
+          marginRight: 100,
+          marginTop: 10
+        }}
+        buttonStyle={{
+          backgroundColor: 'red'
+        }}
+        onPress={e => handleReset(e)}
+      />
 
       <View style={styles.container}>
         {holes.map((hole, i) => {
@@ -107,9 +138,10 @@ export default function App() {
             />
           ) : (
             <Swiss
-              key={arrayIndexIndicator}
-              index={arrayIndexIndicator}
+              key={i}
+              index={i}
               handlePress={e => handlePress(e)}
+              wackable={wackable}
             />
           )
         })}
