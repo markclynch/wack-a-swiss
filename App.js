@@ -74,25 +74,30 @@ export default function App() {
   }, 100)
 
   const handlePressEmpty = e => {
-    console.log(e)
-    setScore(score - 20)
+    if (isRunning) {
+      console.log(e)
+      setScore(score - 20)
+    }
   }
 
   const handlePress = index => {
-    console.log(index)
-    setScore(score + 10)
-    console.log('index')
-    setWackable(false)
-    setTimeout(function() {
-      setWackable(true)
-      refreshBoard(holes)
-    }, 260)
+    if (isRunning) {
+      console.log(index)
+      setScore(score + 10)
+      console.log('index')
+      setWackable(false)
+      setTimeout(function() {
+        setWackable(true)
+        refreshBoard(holes)
+      }, 260)
+    }
   }
 
   const handleStart = () => {
     console.log(isRunning)
     setIsRunning(!isRunning)
   }
+
   const handleReset = () => {
     setIsRunning(false)
     setCount(0)
