@@ -43,14 +43,14 @@ export default function App() {
   const [score, setScore] = useState(0)
   const [count, setCount] = useState(0)
   const [isRunning, setIsRunning] = useState(false)
-  const [difficultyLevel, setDifficultyLevel] = useState(2.0)
+  const [difficultyLevel, setDifficultyLevel] = useState(1.5)
   const [wackable, setWackable] = useState(true)
-
+  const [lives, setLives] = useState(5)
   //Start with a fresh board of empty holes, 1/4 second before new Swiss loaded
   const refreshBoard = () => {
     setTimeout(function() {
       const index = Math.floor(Math.random() * Math.floor(8))
-
+      setWackable(true)
       setHoles(emptyArray.map((curBool, i) => (i === index ? false : curBool)))
     }, 250)
   }
@@ -71,21 +71,20 @@ export default function App() {
 
   const handlePressEmpty = e => {
     if (isRunning) {
-      console.log(e)
-      setScore(score - 20)
+      setLives(lives - 1)
+      setScore(score - 21)
     }
   }
 
   const handlePress = index => {
     if (isRunning) {
       console.log(index)
-      setScore(score + 10)
+      setScore(score + 16)
       console.log('index')
       setWackable(false)
       setTimeout(function() {
-        setWackable(true)
         refreshBoard(holes)
-      }, 260)
+      }, 300)
     }
   }
 
@@ -98,26 +97,21 @@ export default function App() {
     setIsRunning(false)
     setCount(0)
     setScore(0)
+    setLives(5)
+    setHoles(emptyArray)
   }
 
-  return (
+  return lives > 0 ? (
     <View>
       <Text style={styles.title}>Wack'a'Swiss</Text>
-      <View>
-        <Text style={styles.subTitle}>{`Current Score:${score} `}</Text>
-      </View>
-      <View>
-        <Text style={styles.subTitle}>{`Seconds passed: ${count.toFixed(
-          1
-        )}`}</Text>
-      </View>
+
       <Button
         title={!isRunning ? 'START WACKING' : 'PAUSE'}
         titleStyle={{
           fontSize: 26
         }}
         buttonStyle={{
-          backgroundColor: 'green'
+          backgroundColor: 'rgb(79, 185, 77)'
         }}
         containerStyle={{ marginLeft: 100, marginRight: 100 }}
         onPress={e => handleStart(e)}
@@ -156,13 +150,46 @@ export default function App() {
           )
         })}
       </View>
+      <View style={{ alignItems: 'center', backgroundColor: 'red' }}>
+        <View style={styles.row}>
+          <View>
+            <Text style={styles.subTitle}>{`Score:${score} `}</Text>
+          </View>
+          <View>
+            <Text style={styles.subTitle}>{`Time: ${count.toFixed(1)}`}</Text>
+          </View>
+          <View>
+            <Text style={styles.subTitle}>{`Lives: ${lives}`}</Text>
+          </View>
+        </View>
+      </View>
+    </View>
+  ) : (
+    <View style={styles.loser}>
+      <Text style={styles.loserText}>Game Over</Text>
+      <Text style={styles.loserText}>{`Final Score: ${score}`}</Text>
+      <Button
+        title='Start Over'
+        titleStyle={{
+          fontSize: 26
+        }}
+        containerStyle={{
+          marginLeft: 100,
+          marginRight: 100,
+          marginTop: 10
+        }}
+        buttonStyle={{
+          backgroundColor: 'red'
+        }}
+        onPress={e => handleReset(e)}
+      />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 10,
+    marginTop: 0,
     flexDirection: 'row',
     flexWrap: 'wrap',
     backgroundColor: '#fff',
@@ -172,15 +199,34 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: 'bold',
     fontSize: 50,
-    color: 'green',
-    marginTop: 25,
+    color: 'rgb(79, 185, 77)',
+    marginTop: 50,
+    marginBottom: 20,
     alignSelf: 'center'
   },
   subTitle: {
     fontWeight: 'bold',
+    fontSize: 20,
+    color: 'white',
+    marginTop: 20,
+    marginLeft: 10,
+    marginRight: 10
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 50,
+    marginBottom: 50,
+    alignContent: 'center'
+  },
+  loserText: {
+    fontWeight: 'bold',
     fontSize: 30,
-    color: 'red',
-    marginTop: 10,
+    color: 'rgb(79, 185, 77)',
+    marginTop: 15,
     alignSelf: 'center'
+  },
+  loser: {
+    marginTop: 200
   }
 })
