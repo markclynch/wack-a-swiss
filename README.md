@@ -2,10 +2,6 @@
 
 > Wack a mole style game for mobile using react native
 
-**_INSERT ANOTHER GRAPHIC HERE_**
-
-[![INSERT YOUR GRAPHIC HERE](http://i.imgur.com/dt8AUb6.png)]()
-
 ## Installation
 
 - You will need to install expo-cli globally to set up this app
