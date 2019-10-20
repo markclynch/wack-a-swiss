@@ -15,10 +15,11 @@ const Hole = props => {
 const styles = StyleSheet.create({
   holes: {
     backgroundColor: '#222',
-    height: 100,
-    width: 100,
-    borderRadius: 50,
-    margin: 10
+    height: 110,
+    width: 110,
+    borderRadius: 55,
+    margin: 10,
+    marginTop: 15
   }
 })
 

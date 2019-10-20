@@ -11,16 +11,17 @@ const Swiss = props => {
     </View>
   ) : (
     <View>
-      <Image source={require('../images/biff.png')} style={styles.holes} />
+      <Image source={require('../images/pow.png')} style={styles.holes} />
     </View>
   )
 }
 const styles = StyleSheet.create({
   holes: {
-    height: 100,
-    width: 100,
-    borderRadius: 50,
-    margin: 10
+    height: 110,
+    width: 110,
+    borderRadius: 55,
+    margin: 10,
+    marginTop: 20
   }
 })
 export default Swiss
