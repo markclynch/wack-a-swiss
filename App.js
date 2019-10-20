@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import Hole from './components/Hole'
 import Swiss from './components/Swiss'
+import { Audio } from 'expo-av'
 
 const emptyArray = [true, true, true, true, true, true, true, true, true]
 // const arrayIndexIndicator = -1
@@ -26,6 +27,7 @@ function useInterval(callback, delay) {
     }
   }, [delay])
 }
+
 export default function App() {
   const [holes, setHoles] = useState([
     true,
@@ -53,20 +55,14 @@ export default function App() {
     }, 250)
   }
 
-  let wackOpportunities = 0
   useInterval(() => {
     if (isRunning) {
       if (
-        count.toFixed(2) == 0.1 ||
-        (count.toFixed(2) >= 1 && count.toFixed(2) % difficultyLevel == 0)
+        count.toFixed(1) == 0.1 ||
+        (count.toFixed(1) >= 1 && count.toFixed(1) % difficultyLevel == 0)
       ) {
         setHoles(emptyArray)
         refreshBoard(emptyArray)
-        wackOpportunities += 1
-        if (wackOpportunities >= 5) {
-          wackOpportunities = 0
-          setDifficultyLevel(difficultyLevel - 0.25)
-        }
       }
 
       setCount(prevCount => prevCount + 0.1)
@@ -112,16 +108,25 @@ export default function App() {
       </View>
       <View>
         <Text style={styles.subTitle}>{`Seconds passed: ${count.toFixed(
-          2
+          1
         )}`}</Text>
       </View>
       <Button
-        title={!isRunning ? 'Start Wacking' : 'Pause'}
+        title={!isRunning ? 'START WACKING' : 'PAUSE'}
+        titleStyle={{
+          fontSize: 26
+        }}
+        buttonStyle={{
+          backgroundColor: 'green'
+        }}
         containerStyle={{ marginLeft: 100, marginRight: 100 }}
         onPress={e => handleStart(e)}
       />
       <Button
-        title='Reset Game'
+        title='RESET'
+        titleStyle={{
+          fontSize: 26
+        }}
         containerStyle={{
           marginLeft: 100,
           marginRight: 100,
@@ -157,7 +162,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 50,
+    marginTop: 10,
     flexDirection: 'row',
     flexWrap: 'wrap',
     backgroundColor: '#fff',
@@ -168,7 +173,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 50,
     color: 'green',
-    marginTop: 75,
+    marginTop: 25,
     alignSelf: 'center'
   },
   subTitle: {

@@ -11,7 +11,7 @@ const Swiss = props => {
     </View>
   ) : (
     <View>
-      <Image source={require('../images/pow.png')} style={styles.holes} />
+      <Image source={require('../images/biff.png')} style={styles.holes} />
     </View>
   )
 }
